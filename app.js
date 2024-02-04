@@ -1,65 +1,41 @@
-const intro = document.querySelector(".intro");
-const video = intro.querySelector("video");
-const text = intro.querySelector("h1");
-//END SECTION
-const section = document.querySelector("video");
-const end = section.querySelector("h1");
+const html = document.documentElement;
+const canvas = document.getElementById("hero-lightpass");
+const context = canvas.getContext("2d");
 
-//SCROLLMAGIC
-const controller = new ScrollMagic.Controller();
+const frameCount = 51;
+const currentFrame = index => (
+  `https://raw.githubusercontent.com/Wahterworks/images/main/${index.toString().padStart(4, '0')}.png`)
 
-//Scenes
-let scene = new ScrollMagic.Scene({
-  duration: 2500,
-  triggerElement: intro,
-  triggerHook: 0
-})
-  .addIndicators()
-  .setPin(intro)
-  .addTo(controller);
+const preloadImages = () => {
+  for (let i = 1; i < frameCount; i++) {
+    const img = new Image();
+    img.src = currentFrame(i);
+  }
+};
 
-//Text Animation
-const textAnim = TweenMax.fromTo(text, 3, { opacity: 1 }, { opacity: 1 });
+const img = new Image()
+img.src = currentFrame(1);
+canvas.width=4000;
+canvas.height=3000;
+img.onload=function(){
+  context.drawImage(img, 0, 0);
+}
 
-let scene2 = new ScrollMagic.Scene({
-  duration: 3000,
-  triggerElement: intro,
-  triggerHook: 0
-})
-  .setTween(textAnim)
-  .addTo(controller);
+const updateImage = index => {
+  img.src = currentFrame(index);
+  context.drawImage(img, 0, 0);
+}
 
-//Video Animation
-let accelamount = 0.1;
-let scrollpos = 0;
-let delay = 0;
-
-scene.on("update", e => {
-  scrollpos = e.scrollPos / 1000;
+window.addEventListener('scroll', () => {  
+  const scrollTop = html.scrollTop;
+  const maxScrollTop = html.scrollHeight - window.innerHeight;
+  const scrollFraction = scrollTop / maxScrollTop;
+  const frameIndex = Math.min(
+    frameCount - 1,
+    Math.ceil(scrollFraction * frameCount)
+  );
+  
+  requestAnimationFrame(() => updateImage(frameIndex + 1))
 });
 
-setInterval(() => {
-  delay += (scrollpos - delay) * accelamount;
-  console.log(scrollpos, delay);
-
-  video.currentTime = delay;
-}, 33.3);
-
-// Assuming the rest of your JS setup remains the same
-
-// Update or create a dedicated scene for the overlay text
-let textScene = new ScrollMagic.Scene({
-  triggerElement: intro, // Or another element as your trigger
-  duration: 2500, // Duration over which the fade effect should complete
-  triggerHook: 0.05 // Adjust this to control when the text starts to fade in
-})
-.setClassToggle(".overlay-text", "visible") // Optional, if you want to toggle a class
-.addTo(controller);
-
-// Listen to the scene's progress and adjust the opacity of the overlay text accordingly
-textScene.on("enter", function(event) {
-  TweenMax.to(".overlay-text", 0, {autoAlpha: 0}); // Fade in effect
-}).on("leave", function(event) {
-  TweenMax.to(".overlay-text", 0, {autoAlpha: 1}); // Optional: Fade out if scrolling back up
-});
-
+preloadImages()
