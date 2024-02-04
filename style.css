@@ -1,56 +1,17 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: sans-serif;
-}
-
-.intro {
+html {
   height: 100vh;
 }
 
-.intro video {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
+body {
+  height: 500vh;
+  background: #ffffff;
 }
 
-.intro h1 {
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  transform: translate(0, 0);
-  font-size: 30px;
-  color: rgb(0, 0, 0);
+canvas {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100vw;
+  max-height: 100vh;
 }
-
-.intro p {
-  position: absolute;
-  bottom: 2%; /* Position from the bottom */
-  left: 2%; /* Position from the left */
-  font-size: 8px; /* Example font size */
-  color: rgb(0, 0, 0); /* Example color, matching the <h1> */
-}
-
-.overlay-text {
-  position: absolute;
-  top: 20%; /* Adjust this value based on your layout */
-  right: 15%;
-  transform: translateX(-50%);
-  z-index: 10;
-  color: rgb(0, 0, 0); /* Adjust based on your design */
-  text-decoration: none;
-  font-size: 10px; /* Adjust based on your design */
-  
-  /* Ensure the element is initially hidden */
-  opacity: 0;
-  visibility: hidden;
-  
-  /* Transition properties for opacity */
-  /* Although TweenMax handles the animation, defining a transition can smooth out any CSS-based changes */
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
